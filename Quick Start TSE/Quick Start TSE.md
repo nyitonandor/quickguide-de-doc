@@ -16,7 +16,8 @@ Speichern der Kassendaten mit Konformitätserklärung und DATEV-Schnittstelle,
 auch im Rahmen attraktiver Sorglos-Pakete.
 
 Dieses Dokument bietet einen Schnelleinstieg, wie Sie die von Ihnen genutzte TSE
-im Portal einrichten müssen.
+im Portal einrichten müssen. Alle hierzu benötigten und gelisteten TSEs können
+Sie online erwerben unter <http://portal.fiskaltrust.de> .
 
 Begrifflichkeiten
 -----------------
@@ -435,6 +436,9 @@ Configuration“ Button klicken:
 Sie haben die Einrichtung einer TSE und einer CashBox abgeschlossen. Um Ihre
 Konfiguration zu testen lesen Sie bitte Kapitel „[Installation und Start der
 Middleware](#installation-und-start-der-middleware)“.
+
+Um die hier gelisteten und benötigten TSEs zu bestellen, gehen Sie bitte auf
+<http://portal.fiskaltrust.de> .
 
 Installation und Start der Middleware
 =====================================

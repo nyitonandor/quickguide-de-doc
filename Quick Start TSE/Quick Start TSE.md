@@ -359,7 +359,7 @@ Für eine genauere Beschreibung prüfen Sie bitte die offizielle Seite [EPS TS
 
 Dieses Szenario wird mit einigen Voraussetzungen für die Einrichtung unterstützt.
 
-1. Um die Verwendung des direkt an die Hardware angeschlossenen USB-TSE zu aktivieren, installieren Sie den Windows-Treiber auf dem PC. Anschließend ist derselbe XML-Dienst auf localhost (127.0.0.1) über den Standardport 8009 verfügbar. Der **EpsonTSEWinDrv_1.0.0.2.zip**  -Treiber ist auf dem [fiskal-community portal]((https://www.fiscal-community.com/downloads)) verfügbar
+1. Um die Verwendung des direkt an die Hardware angeschlossenen USB-TSE zu aktivieren, installieren Sie den Windows-Treiber auf dem PC. Anschließend ist derselbe XML-Dienst auf localhost (127.0.0.1) über den Standardport 8009 verfügbar. Der **EpsonTSEWinDrv_1.0.0.2.zip**  -Treiber ist auf dem [fiskal-community portal](https://www.fiscal-community.com/downloads) verfügbar
 
 2. Um die Epson-SCU einzurichten, befolgen Sie die üblichen Schritte über das [fiskaltrust portal](https://portal.fiskaltrust.de/) unter Verwendung des neuesten Epson-Release-Kandidaten (RC) und stellen Sie die folgenden Schlüsselwertpaare bereit
 

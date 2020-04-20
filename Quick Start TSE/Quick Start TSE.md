@@ -287,6 +287,98 @@ Sie haben die Einrichtung einer TSE und einer CashBox abgeschlossen. Um Ihre
 Konfiguration zu testen lesen Sie bitte Kapitel „[Installation und Start der
 Middleware](#installation-und-start-der-middleware)“.
 
+Epson TSE
+==================
+
+Im Folgenden werden die einzelnen Konfigurationsschritte beschrieben, um eine Epson TSE mit der fiskaltrust Middleware zu nutzen.
+
+Logen Sie sich dazu auf unser Portal ein (für Test: [https://portal-sandbox.fiskaltrust.de/Account/Login](https://portal-sandbox.fiskaltrust.de/Account/Login) für
+Produktion unter [https://portal.fiskaltrust.de/Account/Login)](https://portal.fiskaltrust.de/Account/Login)).
+
+Einrichten TSE
+--------------
+
+Mit dem Epson-basierten SCU-Paket unterstützen wir die folgenden Setup-Szenarien und alle verwenden die XML-Schnittstelle für die Kommunikation mit der TSE.
+
+## EPS TSE Server 3 + Usb TSE
+
+Wenn Sie dieses Szenario verwenden, muss der Epson TSE-Server zunächst mit einigen Schritten für die Verwendung vorbereitet werden.
+
+### Hardware-Installation
+
+1. Stecken Sie ein TSE-Modul in den USB-Anschluss des Fiskalservers.
+2. Wiederholen Sie Schritt 1 für jedes anzuschließende TSE Modul.
+3. Verbinden Sie das Netzwerkkabel (RJ-45) zu Fiskalserver.
+4. Schließen Sie das Strom-Netzkabel an den Fiskalserver an. Der Fiskalserver wird gestartet und ist dann betriebsbereit.
+
+### Software-Installation and IP address allocation 
+
+1. Nach Abschluss der Hardwareinstallation prüft der Fiskalserver, ob er mithilfe des DHCP-Protokolls dynamisch eine IPv4-Netzwerkkonfiguration empfängt. Ist dies nicht der Fall, gibt sich der Fiskalserver selbst eine IP-Adresse von Zeroconf aus dem für Zeroconf reservierten Adressbereich (169.254.0.0/16).
+
+2. Die zugewiesene IPV4 Adresse des Fiskalservers kann mit Hilfe des folgenden Tools bestimmt werden
+
+    - [SEH Product Manager (Win)](https://www.seh-technology.com/fileadmin/user/downloads/deviceserver/tools/sehproductmanager-win-1.0.4.zip)  
+    - [SEH Product Manager (macOS)](https://www.seh-technology.com/fileadmin/user/downloads/deviceserver/tools/sehproductmanager-mac-1.0.4.zip)  
+
+3. Greifen Sie unter Verwendung der von SEH Product Manager ermittelten IP-Adresse über die Anmeldeseite mit den folgenden Anmeldeinformationen auf die Benutzeroberfläche von EPS TSE Server 3 zu, um eine detaillierte Liste der TSE-Geräte zu erhalten:
+
+    - User name: admin
+    - Password: admin
+
+    ![login](media/epson/epson-server-3-login.jpg)
+    ![settings](media/epson/epson-server-3-tse-modules.jpg)
+
+4. Um die Epson-SCU einzurichten, befolgen Sie die üblichen Schritte über das fiskaltrust portal unter Verwendung des neuesten Epson-Release-Kandidaten (RC) und stellen Sie die folgenden Schlüsselwertpaare bereit
+
+    - tseurl - xxx.xx.xx.xx (die IP-Adresse des EPS TSE Server oder externe IP-Adresse mit Port Weiterleitung)
+    - tseport - xxxx (Standard TCP 8009 für unverschlüsselte Gerätekommunikation oder TCP 8143 für verschlüsselte Gerätekommunikation
+    - deviceid - TSE_0BA3507F5D11679B4892E104F75B262D6B2E2EA36B5E345C9B16CD5F9D7EFCA2 (Geräte-Id des TSE Modules, welches durch den EPS TSE Server vergeben wurde)
+
+    ![Epson SCU configuration - EPS TSE server](media/epson/epson-scu-configurtion-with-eps-server.jpg)
+
+Für eine detailliertere Beschreibung nutzen Sie bitte die offizielle [EPS TSE Server 3](https://www.seh-technology.com/services/downloads/download-fiscal-solutions/eps-tse-server-3.html) Seite und das [installation and user manual](https://www.seh-technology.com/fileadmin/user/downloads/fiscal_solutions/Dokumentation/TSEServer3_UM10.pdf) des Herstellers.
+
+## EPS Printer + MicroSD 
+
+1. Laden Sie den aktuellsten Treiber von [Epson printer driver](https://download.epson-biz.com/modules/pos/index.php?page=genre&pcat=52)  
+
+2. Installieren des Epson Treibers
+
+3. Navigieren Sie nach erfolgreicher Einrichtung mit der angegebenen IP-Adresse während der Installation zu Ihrer Druckerschnittstelle, z. B. https://10.1.1.1/webconfig/  
+
+4. Um die Epson-SCU einzurichten, befolgen Sie die üblichen Schritte über das [fiskaltrust portal](https://portal.fiskaltrust.de/) unter Verwendung des neuesten Epson-Release-Kandidaten (RC) und stellen Sie die folgenden Schlüsselwertpaare bereit
+
+    - tseurl - xxx.xx.xx.xx  (IP-Adresse vom EPS TSE Server oder externe IP-Adresse mit Portweiterleitung)
+    - tseport - xxxx (Standard TCP 8009 für unverschlüsselte Gerätekommunikation oder TCP 8143 für [everschlüsselte Gerätes](#verschlüsselte-geräte)
+
+    ![Epson SCU configuration - EPS Printer](media/epson/epson-scu-configurtion-with-eps-printer.jpg)
+
+Für eine genauere Beschreibung prüfen Sie bitte die offizielle Seite [EPS TSE Server 3](https://www.seh-technology.com/services/downloads/download-fiscal-solutions/eps-tse-server-3.html) und das [installation and user manual](https://support.vendhq.com/hc/en-us/articles/201378420-How-do-I-set-up-my-Epson-TM-T88V-Printer-to-work-on-a-wireless-network)  
+
+## EPS USB TSE an der Hardware angeschlossen
+
+Dieses Szenario wird mit einigen Voraussetzungen für die Einrichtung unterstützt.
+
+1. Um die Verwendung des direkt an die Hardware angeschlossenen USB-TSE zu aktivieren, installieren Sie den Windows-Treiber auf dem PC. Anschließend ist derselbe XML-Dienst auf localhost (127.0.0.1) über den Standardport 8009 verfügbar. Der **EpsonTSEWinDrv_1.0.0.2.zip**  -Treiber ist auf dem [fiskal-community portal]((https://www.fiscal-community.com/downloads)) verfügbar
+
+2. Um die Epson-SCU einzurichten, befolgen Sie die üblichen Schritte über das [fiskaltrust portal](https://portal.fiskaltrust.de/) unter Verwendung des neuesten Epson-Release-Kandidaten (RC) und stellen Sie die folgenden Schlüsselwertpaare bereit
+
+    - tseurl - 127.0.0.1 (IP-Adresse (localhost), die vom EPS TSE-Windows-Treiber bereitgestellt wird)  
+    - tseport - xxxx (Standard TCP 8009 für unverschlüsselte Gerätekommunikation oder TCP 8143 für everschlüsselte Gerätes
+
+    ![Epson USB TSE](media/epson/epson-scu-configurtion-with-eps-driver.jpg)
+
+### Fussnoten
+
+#### Verschlüsselte Geräte
+
+Die folgenden Produkte unterstützen TCP (verschlüsselt)
+
+- TM-DT Series
+- TM-T88VI-iHUB
+- TM-m30
+- TM-H6000V
+
 Fiskaly Online TSE
 ==================
 

@@ -300,18 +300,18 @@ Einrichten TSE
 
 Mit dem Epson-basierten SCU-Paket unterstützen wir die folgenden Setup-Szenarien und alle verwenden die XML-Schnittstelle für die Kommunikation mit der TSE.
 
-## EPS TSE Server 3 + Usb TSE
+### EPS TSE Server 3 + Usb TSE
 
 Wenn Sie dieses Szenario verwenden, muss der Epson TSE-Server zunächst mit einigen Schritten für die Verwendung vorbereitet werden.
 
-### Hardware-Installation
+#### Hardware-Installation
 
 1. Stecken Sie ein TSE-Modul in den USB-Anschluss des Fiskalservers.
 2. Wiederholen Sie Schritt 1 für jedes anzuschließende TSE Modul.
 3. Verbinden Sie das Netzwerkkabel (RJ-45) zu Fiskalserver.
 4. Schließen Sie das Strom-Netzkabel an den Fiskalserver an. Der Fiskalserver wird gestartet und ist dann betriebsbereit.
 
-### Software-Installation and IP address allocation 
+#### Software-Installation and IP address allocation
 
 1. Nach Abschluss der Hardwareinstallation prüft der Fiskalserver, ob er mithilfe des DHCP-Protokolls dynamisch eine IPv4-Netzwerkkonfiguration empfängt. Ist dies nicht der Fall, gibt sich der Fiskalserver selbst eine IP-Adresse von Zeroconf aus dem für Zeroconf reservierten Adressbereich (169.254.0.0/16).
 
@@ -338,7 +338,7 @@ Wenn Sie dieses Szenario verwenden, muss der Epson TSE-Server zunächst mit eini
 
 Für eine detailliertere Beschreibung nutzen Sie bitte die offizielle [EPS TSE Server 3](https://www.seh-technology.com/services/downloads/download-fiscal-solutions/eps-tse-server-3.html) Seite und das [installation and user manual](https://www.seh-technology.com/fileadmin/user/downloads/fiscal_solutions/Dokumentation/TSEServer3_UM10.pdf) des Herstellers.
 
-## EPS Printer + MicroSD 
+### EPS Printer + MicroSD 
 
 1. Laden Sie den aktuellsten Treiber von [Epson printer driver](https://download.epson-biz.com/modules/pos/index.php?page=genre&pcat=52)  
 
@@ -355,13 +355,23 @@ Für eine detailliertere Beschreibung nutzen Sie bitte die offizielle [EPS TSE S
 
 Für eine genauere Beschreibung prüfen Sie bitte die offizielle Seite [EPS TSE Server 3](https://www.seh-technology.com/services/downloads/download-fiscal-solutions/eps-tse-server-3.html) und das [installation and user manual](https://support.vendhq.com/hc/en-us/articles/201378420-How-do-I-set-up-my-Epson-TM-T88V-Printer-to-work-on-a-wireless-network)  
 
-## EPS USB TSE an der Hardware angeschlossen
+### EPS USB TSE an der Hardware angeschlossen
 
 Dieses Szenario wird mit einigen Voraussetzungen für die Einrichtung unterstützt.
 
 1. Um die Verwendung des direkt an die Hardware angeschlossenen USB-TSE zu aktivieren, installieren Sie den Windows-Treiber auf dem PC. Anschließend ist derselbe XML-Dienst auf localhost (127.0.0.1) über den Standardport 8009 verfügbar. Der **EpsonTSEWinDrv_1.0.0.2.zip**  -Treiber ist auf dem [fiskal-community portal](https://www.fiscal-community.com/downloads) verfügbar
 
-2. Um die Epson-SCU einzurichten, befolgen Sie die üblichen Schritte über das [fiskaltrust portal](https://portal.fiskaltrust.de/) unter Verwendung des neuesten Epson-Release-Kandidaten (RC) und stellen Sie die folgenden Schlüsselwertpaare bereit
+2. Stecken Sie den Stick ein und stellen Sie sicher, dass der USB-Stick vom Betriebssystem erkannt wurde. Dies können Sie mit Hilfe des mitinstallieren TSE-Monitors prüfen. Starten Sie es über den Startbutton:
+
+    ![Epson USB TSE Monitor](media/epson/epson-scu-configurtion-with-eps-driver-monitor-1.jpg)
+
+    In der Statusbar erscheint ein grünes Schloss:
+
+    ![Epson USB TSE Monitor 2](media/epson/epson-scu-configurtion-with-eps-driver-monitor-2.jpg)
+
+    ![Epson USB TSE Monitor 3](media/epson/epson-scu-configurtion-with-eps-driver-monitor-3.jpg)
+
+3. Um die Epson-SCU einzurichten, befolgen Sie die üblichen Schritte über das [fiskaltrust portal](https://portal.fiskaltrust.de/) unter Verwendung des neuesten Epson-Release-Kandidaten (RC) und stellen Sie die folgenden Schlüsselwertpaare bereit
 
     - tseurl - 127.0.0.1 (IP-Adresse (localhost), die vom EPS TSE-Windows-Treiber bereitgestellt wird)  
     - tseport - xxxx (Standard TCP 8009 für unverschlüsselte Gerätekommunikation oder TCP 8143 für everschlüsselte Gerätes
@@ -378,6 +388,69 @@ Die folgenden Produkte unterstützen TCP (verschlüsselt)
 - TM-T88VI-iHUB
 - TM-m30
 - TM-H6000V
+
+Einrichten Queue 
+----------------
+
+Unter dem Menüpunkt Konfiguration|Queue klicken Sie den Button „+Neu anlegen“ um eine für die Cashbox benötigte „Queue“ anzulegen.
+
+![Queue Create](media/epson/epson-queue-create.jpg)
+
+Vergeben Sie bei der Beschreibung einen Namen für die Queue, hier z.B. „EpsonQueue“.
+Als Standard werden Ihnen hier weitere Werte voreingestellt, die Sie i.d.R. nur übernehmen:
+
+- Package Name (fiskaltrust.Middleware.Queue.SQLite)  
+- Package Version (1.3.0…)
+- Timeout (1500)
+- Länderkürzel (Deutschland (DE))
+
+In dem Feld „CashBox Identification“ vergeben Sie bitte einen eindeutigen Namen, hier z.B. „Epson“. Hierbei sind keine Sonderzeichen erlaubt, lediglich A-Za-z0-9'()+,-./:=?  und das Leerzeichen.
+Drücken Sie auf Speichern, um Ihre Einstellungen zur Queue zu sichern. Es erscheint eine weitere Konfigurationsseite zur Queue, in der Sie die Kommunikationsendpunkte eintragen, mit welchem Protokoll Sie als Kassenhersteller (Entwickler) mit unserer Middleware kommunizieren:
+
+![Queue Configuration](media/epson/epson-queue-configuration.jpg)
+
+Beschreibung, Package Name und Version wurden aus der vorhergehenden Seite übernommen.  
+Wir haben hier beispielhaft alle Endpunktmöglichkeiten eingetragen. Mindestens einer ist notwendig:
+
+- Klick auf „http“ und tragen Sie:rest://localhost:1200/...
+- Manuell eingetragen:grpc://localhost:10103  und „+“-Button drücken
+
+Klicken Sie „Speichern und Schließen“ um die Einstellungen zur Queue abzuschließen.
+
+Zusammenstellen Cashbox 
+-----------------------
+
+Um die Konfiguration abzuschließen, klicken Sie unter dem Menüpunkt Konfiguration|CashBox den Button „+Hinzufügen“.
+
+![Cashbox Create](media/epson/epson-cashbox-create.jpg)
+
+Vergeben Sie unter Beschreibung einen treffenden Namen für Ihre Cashbox und klicken Speichern.
+
+In der Übersicht der Konfigurationscontainer im Menü „CashBox“ finden Sie Ihre CashBox mit dem von Ihnen vergebenen Beschreibungsnamen, hier beispielsweise „EpsonCashbox“.
+
+![Cashbox List](media/epson/epson-cashbox-list.jpg)
+
+Klicken Sie auf den „Bearbeiten per DragNDrop“-Button (![dragfrop](media/5b7bfe2ee356e6c0a72ec08cf5bc2ad8.png)), um Ihrer CashBox die von Ihnen zuvor angelegte TSE und die Queue hinzuzufügen. In der sich öffnenden Ansicht ziehen Sie mit der Maus aus dem rechten Bereich „Queues“ Ihre angelegte Queue (hier „EpsonQueue“) in den linken leeren Bereich Ihrer Cashbox unterhalb der CahBox-Beschreibung.
+
+Ebenso verfahren Sie mit der TSE aus dem rechten Bereich „Signaturerstellungseinheiten“;  ziehen Sie die TSE (hier „EpsonTSE“) ebenfalls  nach links in den Platzhalter Ihrer CashBox.
+
+![Cashbox Prepare](media/epson/epson-cashbox-prepare.jpg)
+
+Speichern Sie die CashBox-Konfiguration durch Klick auf den Speichern Button im unteren Bereich des Formulars.  
+
+Sie gelangen zurück in die Übersichtsliste der Cashboxen:
+
+![Cashbox Prepared](media/epson/epson-cashbox-prepared.jpg)
+
+Klicken Sie auf das „Rechteck mit Pfeil“ (![available-scu](media/link.png)) und bestätigen die Zuordnung der TSE zu Ihrer CashBox durch Setzen eines Hackens vor die TSE:
+
+![Cashbox Link Qeueu-SCU](media/epson/epson-cashbox-link-queue-scu.jpg)
+
+Mit „Speichern und schließen“ beenden Sie das Formular.
+
+Schließen Sie die Cashbox Konfiguration ab, indem Sie auf den „Rebuild Configuration“ Button klicken:
+
+![Cashbox Rebuild Configuration](media/epson/epson-cashbox-rebuild.jpg)
 
 Fiskaly Online TSE
 ==================
